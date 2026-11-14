@@ -2,6 +2,6 @@ import Link from "next/link"
 
 export const Logo = () => {
     return (
-        <Link href="/">NEXT TECH</Link>
+        <Link href="/">NEXT TECH<sup>®</sup></Link>
     );
 };

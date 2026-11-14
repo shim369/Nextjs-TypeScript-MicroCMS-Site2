@@ -20,10 +20,10 @@ describe('SERVICE Page', () => {
 		render(<Page />);
 
 		const services: Service[] = [
-			{ title: "Website Development", technologies: "HTML, CSS/SASS, JavaScript, Astro", price: "¥300,000 ~" },
-			{ title: "Web Application Development", technologies: "Next.js, Nuxt.js, Python, Django", price: "¥500,000 ~" },
-			{ title: "CMS Construction", technologies: "WordPress, MicroCMS, Newt", price: "¥200,000 ~" },
-			{ title: "Design & UI/UX", technologies: "Figma, Adobe Photoshop, Illustrator", price: "¥150,000 ~" },
+			{ title: "Website Development", technologies: "HTML, CSS/SASS, JavaScript, Astro", price: "¥400,000 ~" },
+			{ title: "Web Application Development", technologies: "Next.js, Nuxt.js, Python, Django", price: "¥1,000,000 ~" },
+			{ title: "CMS Construction", technologies: "WordPress, MicroCMS, Newt", price: "¥500,000 ~" },
+			{ title: "Design & UI/UX", technologies: "Figma, Adobe Photoshop, Illustrator", price: "¥200,000 ~" },
 		];
 
 		services.forEach((service: Service) => {
@@ -38,8 +38,8 @@ describe('SERVICE Page', () => {
 
 		const additionalOptions: AdditionalOption[] = [
 			{ title: "Maintenance", price: "¥20,000 ~ /Month" },
-			{ title: "SEO Optimization", price: "¥50,000 ~" },
-			{ title: "Content Creation", price: "¥30,000 ~" },
+			{ title: "SEO Optimization", price: "¥80,000 ~" },
+			{ title: "Content Creation", price: "¥30,000 ~ /Page" },
 		];
 
 		additionalOptions.forEach((option: AdditionalOption) => {

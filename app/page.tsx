@@ -1,144 +1,85 @@
-"use client"
-import React, { useRef, useEffect } from 'react'
-import Gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
-import Image from 'next/image'
+import React from 'react'
 import styles from './styles/page.module.scss'
-import { SlideBox } from './components/SlideBox'
 import { Contact } from './components/Contact'
 import { Service } from './components/Service'
+import { Statement } from './components/Statement'
 
-Gsap.registerPlugin(ScrollTrigger);
+const tickerItems = ['HTML', 'CSS', 'JavaScript', 'Python', 'PHP', 'Next.js', 'Corporate Sites', 'Online Shops']
 
 export default function Home() {
-  const topLeftInnerRef = useRef<HTMLDivElement>(null);
-  const topRightRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const videoTextRef = useRef<HTMLHeadingElement>(null);
-  const videoContainerRef = useRef<HTMLDivElement>(null);
-  const contentsBoxRef = useRef<HTMLDivElement>(null);
-  const slideVisualRef = useRef<HTMLDivElement>(null);
-  const slideTextRef = useRef<HTMLHeadingElement>(null);
-  const contactRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const topLeftInner = topLeftInnerRef.current;
-    const topRight = topRightRef.current;
-    Gsap.set(topLeftInner, { y: '30px', autoAlpha: 0 });
-    Gsap.set(topRight, { autoAlpha: 0 });
-
-    const TL = Gsap.timeline();
-
-    TL.to(topLeftInner, { y: '0px', autoAlpha: 1, duration: 0.5, delay: 0.3, ease: 'power4.out' });
-    TL.to(topRight, { autoAlpha: 1, duration: 1, delay: 0.3, ease: 'power4.out' }, '-=0.3');
-  });
-
-  useEffect(() => {
-    const videoContainer = videoContainerRef.current;
-    const videoText = videoTextRef.current;
-    Gsap.set(videoContainer, { y: '30px', autoAlpha: 0 });
-
-    Gsap.to(videoRef.current, {
-      scrollTrigger: {
-        trigger: videoContainer,
-        start: 'top center',
-        end: 'bottom center',
-        onEnter: () => {
-          Gsap.to(videoContainer, { y: '0px', autoAlpha: 1, duration: 0.5 });
-          Gsap.to(videoText, { autoAlpha: 1, delay: 0.5, duration: 0.5, ease: 'power4.out' });
-        },
-      },
-    });
-  }, [videoRef]);
-
-  useEffect(() => {
-    const contentsBox = contentsBoxRef.current;
-    Gsap.set(contentsBox, { y: '30px', autoAlpha: 0 });
-
-    ScrollTrigger.create({
-      trigger: contentsBox,
-      start: 'top center',
-      end: 'center center',
-      onEnter: () => {
-        if (contentsBox) {
-          Gsap.to(contentsBox, { y: '0px', autoAlpha: 1, duration: 0.5 });
-        }
-      },
-    });
-  });
-
-  useEffect(() => {
-    const slideVisual = slideVisualRef.current;
-    const slideText = slideTextRef.current;
-    Gsap.set(slideVisual, { y: '30px', autoAlpha: 0 });
-    ScrollTrigger.create({
-      trigger: slideVisual,
-      start: 'top center',
-      end: 'center center',
-      onEnter: () => {
-        Gsap.to(slideVisual, { y: '0px', autoAlpha: 1, duration: 0.5 });
-        Gsap.to(slideText, { autoAlpha: 1, delay: 0.5, duration: 0.5, ease: 'power4.out' });
-      },
-    });
-  });
-
-  useEffect(() => {
-    const contact = contactRef.current;
-    Gsap.set(contact, { y: '30px', autoAlpha: 0 });
-
-    ScrollTrigger.create({
-      trigger: contact,
-      start: 'top center',
-      end: 'center center',
-      onEnter: () => {
-        Gsap.to(contact, { y: '0px', autoAlpha: 1, duration: 0.5 });
-      },
-    });
-  });
-
   return (
     <>
-      <section className={styles.topVisual}>
-        <div className={styles.topLeft}>
-          <div id="topLeftInner" className={styles.topLeftInner} ref={topLeftInnerRef}>
-            <span className={styles.logo}>Web Development</span>
-            <p>Welcome to NEXT TECH.<br />Your gateway to cutting-edge tech solutions.</p>
+      {/* Hero */}
+      <section className={styles.hero} id="top">
+        <div className={styles.wrap}>
+          <div className={styles.metaRow}>
+            <span>(Web Development)</span>
+            <span>Est. 2023 — Tokyo, JP</span>
+            <span>Available for new projects</span>
+          </div>
+
+          <h1 className={styles.heroTitle} aria-label="Increasing Business Velocity through Technology">
+            <span className={styles.line} aria-hidden="true"><span>Increasing</span></span>
+            <span className={`${styles.line} ${styles.right}`} aria-hidden="true"><span>Business</span></span>
+            <span className={styles.line} aria-hidden="true">
+              <span><em className={styles.hot}>Velocity</em><span className={styles.outline}>/Tech</span></span>
+            </span>
+          </h1>
+
+          <div className={styles.heroBottom}>
+            <p className={styles.heroLead}><b>Welcome to NEXT TECH.</b> Your gateway to cutting-edge tech solutions — built to move your business faster.</p>
+            <a href="#contact" className={styles.cta}>Start a project <span className={styles.ar}>→</span></a>
+            <div className={styles.badge} aria-hidden="true">
+              <svg viewBox="0 0 200 200">
+                <defs><path id="circ" d="M100,100 m-80,0 a80,80 0 1,1 160,0 a80,80 0 1,1 -160,0" /></defs>
+                <text fontSize="15" letterSpacing="5" fill="#121212">
+                  <textPath href="#circ">WEB DEVELOPMENT • SINCE 2023 • NEXT TECH • </textPath>
+                </text>
+              </svg>
+              <span className={styles.core}>↓</span>
+            </div>
           </div>
         </div>
-        <div id="topRight" className={styles.topRight} ref={topRightRef}>
-          <Image src="/top-v.webp" alt="NEXT TECH" width={681} height={400} priority />
+      </section>
+
+      {/* Ticker */}
+      <div className={styles.ticker} aria-hidden="true">
+        <div className={styles.tickerTrack}>
+          {[...tickerItems, ...tickerItems].map((item, i) => (
+            <span key={i}>{item}</span>
+          ))}
         </div>
-      </section>
-      <section id="videoContainer" className={styles.videoContainer} ref={videoContainerRef}>
-        <h2 className={styles.videoText} ref={videoTextRef}>
-          Increasing Business Velocity <br />through Technology
-        </h2>
-        <video
-          className={styles.video}
-          ref={videoRef}
-          loop
-          muted
-          autoPlay
-          playsInline
-          poster="/poster.webp"
-        >
-          <source src="/video.mp4" type="video/mp4" />
-        </video>
-      </section>
-      <section id="service">
-        <div id="contentsBox" className={styles.contentsBox} ref={contentsBoxRef}>
+      </div>
+
+      {/* Index */}
+      <section className={styles.section} id="index">
+        <div className={styles.wrap}>
+          <div className={styles.secTop} data-reveal>
+            <span className={styles.mono}>( Index — 04 )</span>
+            <h2>What I do,<br />and how.</h2>
+          </div>
           <Service />
         </div>
       </section>
-      <section id="slideVisual" className={styles.slideVisual} ref={slideVisualRef}>
-        <div id="slideVisualInner" className={styles.slideVisualInner}>
-          <SlideBox />
-          <h3 className={styles.slideText} ref={slideTextRef}>Would you like to try <br />the latest technology?</h3>
+
+      {/* Statement */}
+      <section className={styles.statement}>
+        <div className={styles.wrap}>
+          <span className={styles.mono}>( Philosophy )</span>
+          <Statement text="Technology is not the goal. Speed, clarity and growth for your business — that is what I build for." />
+          <div className={styles.statementFoot} data-reveal>
+            <div className={styles.stat}><b>2023</b><span>Founded</span></div>
+            <div className={styles.stat}><b>6+</b><span>Core technologies</span></div>
+            <div className={styles.stat}><b>1:1</b><span>Direct communication</span></div>
+          </div>
         </div>
       </section>
-      <section id="contact" className={styles.contact} ref={contactRef}>
-        <h2>CONTACT</h2>
-        <Contact />
+
+      {/* Contact */}
+      <section className={styles.contact} id="contact">
+        <div className={styles.wrap}>
+          <Contact />
+        </div>
       </section>
     </>
   )

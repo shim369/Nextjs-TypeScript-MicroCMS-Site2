@@ -1,21 +1,23 @@
 "use client";
-import React, { useEffect, useState, useRef } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faGithub } from '@fortawesome/free-brands-svg-icons'
-import { faBlog } from '@fortawesome/free-solid-svg-icons'
-import Link from 'next/link';
+import React, { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import styles from '../styles/page.module.scss';
 import { Logo } from './Logo';
 import { LinkList } from './LinkList';
+import { Clock } from './Clock';
 
 export const Header = () => {
-  const [isNavActive, setIsNavActive] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
-  const pcNavRef = useRef(null);
+  const pathname = usePathname();
 
   const toggleNavClick = () => {
     setIsNavOpen((prev) => !prev);
   };
+
+  // Close the menu after navigating
+  useEffect(() => {
+    setIsNavOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     document.body.classList.toggle(styles.open, isNavOpen);
@@ -25,54 +27,47 @@ export const Header = () => {
     };
   }, [isNavOpen]);
 
+  // Close with Escape
   useEffect(() => {
-    const handleScroll = () => {
-      if (pcNavRef.current) {
-        const isScrolled = window.scrollY > 60;
-        setIsNavActive(isScrolled);
-      }
-    };    
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+    if (!isNavOpen) return;
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setIsNavOpen(false);
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [isNavOpen]);
 
   return (
     <>
       <header className={styles.header} data-testid="header">
-        <div className={styles.headerInner}>
-          <p className={styles.headerLogo}>
+        <nav className={`${styles.wrap} ${styles.nav}`} aria-label="Main">
+          <p className={styles.logo}>
             <Logo />
           </p>
-          <nav ref={pcNavRef} className={`${styles.pcNav} ${isNavActive ? styles.active : ''}`}>
+          <div className={styles.menu}>
             <LinkList />
-          </nav>
-        </div>
-        <ul className={styles.snsLink}>
-          <li><Link href="https://github.com/shim369" target="_blank" title="GitHub"><FontAwesomeIcon icon={faGithub} /></Link></li>
-          <li><Link href="https://sohtani.pythonanywhere.com/" target="_blank" title="TECH BLOG"><FontAwesomeIcon icon={faBlog} /></Link></li>
-        </ul>
-      </header>
-      <div id="jsNavToggle" className={styles.jsNavToggle} onClick={toggleNavClick} data-testid="jsNavToggle">
-        <div>
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-      </div>
-      <div id="jsSpNav" className={styles.jsSpNav}>
-        <div className={styles.spNavInner}>
-          <div className={styles.spNavLinks}>
-            <p className={styles.logo}>
-              <Logo />
-            </p>
-            <nav id="spNav" className={styles.spNav}>
-              <LinkList />
-            </nav>
           </div>
+          <div className={styles.navRight}>
+            <Clock />
+            <button
+              type="button"
+              className={styles.burger}
+              onClick={toggleNavClick}
+              aria-expanded={isNavOpen}
+              aria-controls="overlayMenu"
+              data-testid="jsNavToggle"
+            >
+              {isNavOpen ? 'CLOSE' : 'MENU'}
+            </button>
+          </div>
+        </nav>
+      </header>
+
+      <div id="overlayMenu" className={styles.overlay} aria-hidden={!isNavOpen}>
+        <nav aria-label="Mobile">
+          <LinkList variant="big" />
+        </nav>
+        <div className={`${styles.ext} ${styles.mono}`}>
+          <a href="https://github.com/shim369" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+          <a href="https://sohtani.pythonanywhere.com/" target="_blank" rel="noopener noreferrer">Tech Blog ↗</a>
         </div>
       </div>
     </>

@@ -1,5 +1,6 @@
 "use client"
 import React, { useState } from 'react';
+import type { KeyboardEvent } from 'react';
 import styles from '../styles/page.module.scss'
 
 export const Faq = () => {
@@ -12,18 +13,37 @@ export const Faq = () => {
       setOpenQuestions([...openQuestions, index]);
     }
   };
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLElement>, index: number) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      handleToggleQuestion(index);
+    }
+  };
+
   return (
     <div className={styles.qaList}>
-      {faqData.map((faq, index) => (
-        <dl className={styles.qa} key={index}>
-          <dt onClick={() => handleToggleQuestion(index)} className={openQuestions.includes(index) ? 'open' : ''}>
-            {faq.question}
-          </dt>
-          <dd style={{ display: openQuestions.includes(index) ? 'block' : 'none' }}>
-            {faq.answer}
-          </dd>
-        </dl>
-      ))}
+      {faqData.map((faq, index) => {
+        const isOpen = openQuestions.includes(index);
+        return (
+          <dl className={`${styles.qa} ${isOpen ? styles.qaOpen : ''}`} key={index} data-reveal>
+            <dt
+              onClick={() => handleToggleQuestion(index)}
+              onKeyDown={(e) => handleKeyDown(e, index)}
+              role="button"
+              tabIndex={0}
+              aria-expanded={isOpen}
+              aria-controls={`faq-answer-${index}`}
+            >
+<span className={styles.num} aria-hidden="true">Q.{String(index + 1).padStart(2, '0')}</span>
+              {faq.question}
+            </dt>
+            <dd id={`faq-answer-${index}`} style={{ display: isOpen ? 'block' : 'none' }}>
+              {faq.answer}
+            </dd>
+          </dl>
+        );
+      })}
     </div>
   )
 }
@@ -31,7 +51,7 @@ export const Faq = () => {
 const faqData = [
   {
     question: 'How is the service fee determined?',
-    answer: "The fee varies based on the project's scope, requirements, and the technologies used. The base plan starts at ¥300,000, but a specific estimate will be provided after I have the details of your project.",
+    answer: "The fee varies based on the project's scope, requirements, and the technologies used. The base plan starts at ¥400,000, but a specific estimate will be provided after I have the details of your project.",
   },
   {
     question: 'Do you offer post-development support?',
@@ -55,6 +75,6 @@ const faqData = [
   },
   {
     question: 'Do you provide content creation services?',
-    answer: 'Yes, I offer content creation services. The base fee for content creation starts at ¥30,000.',
+    answer: 'Yes, I offer content creation services. The base fee for content creation starts at ¥30,000 per page.',
   },
 ];

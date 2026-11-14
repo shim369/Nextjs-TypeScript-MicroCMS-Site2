@@ -10,10 +10,10 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <section id="contact">
-      <UnderInner title={metadata.title as string} />
-      <div className={styles.containerInner}>
+      <UnderInner title={metadata.title as string} label="Something went wrong" />
+      <div className={`${styles.wrap} ${styles.notice}`} data-reveal>
         <p className={styles.underRead}>Sending your inquiry failed.</p>
-        <Link href="/contact" className={styles.linkText}>Back to Previous Page</Link>
+        <Link href="/contact" className={styles.cta}><span className={styles.ar}>←</span> Back to Previous Page</Link>
       </div>
     </section>
   )
