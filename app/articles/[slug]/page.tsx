@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { getArticles, getArticleBySlug } from '@/lib/newt'
 import type { Article } from '@/types/article'
 import type { Metadata } from 'next'
@@ -32,17 +33,16 @@ export default async function Article({ params }: Props) {
 
   return (
     <section>
-      <UnderInner title={"BLOG"} />
-      <div className={styles.blogDetail}>
-        <hr />
-        <div className={styles.blogContent}>
-          <h1>{article.title}</h1>
-          <div className={styles.date}>
+      <UnderInner title={"BLOG"} label="Article" />
+      <div className={`${styles.wrap} ${styles.pageBody}`}>
+        <article className={styles.blogDetail} data-reveal>
+          <Link href="/blog" className={styles.backLink}>← Back to Blog</Link>
+          <time className={styles.date}>
             {new Intl.DateTimeFormat('en-US', { dateStyle: 'medium' }).format(new Date(article.date))}
-          </div>
-          <div dangerouslySetInnerHTML={{ __html: article.body }} />
-        </div>
-        <hr />
+          </time>
+          <h2 className={styles.articleTitle}>{article.title}</h2>
+          <div className={styles.blogContent} dangerouslySetInnerHTML={{ __html: article.body }} />
+        </article>
       </div>
     </section>
   );

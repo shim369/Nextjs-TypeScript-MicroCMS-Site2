@@ -12,32 +12,38 @@ export default async function Page() {
   const articles = await getArticles()
   return (
     <section id="blog">
-      <UnderInner title={metadata.title as string} />
-      <div className={styles.containerInner}>
-        <p className={styles.underRead}>On my blog, I regularly update the latest industry trends, technical tutorials, and up-to-date information. <br />If you have any questions or inquiries, please feel free to contact us through my contact page.</p>
+      <UnderInner title={metadata.title as string} label="Articles & Notes" />
+      <div className={`${styles.wrap} ${styles.pageBody}`}>
+        <p className={styles.underRead} data-reveal>On my blog, I regularly update the latest industry trends, technical tutorials, and up-to-date information. If you have any questions, please feel free to contact me through my contact page.</p>
 
-        <ul className={styles.flexBlog}>
-          {articles.map((article) => {
-            return (
-              <li key={article._id}>
-                <Link href={`articles/${article.slug}`}>
-                  <div className={styles.imgWrapper}>
-                    <img
-                      src={article.coverImage.src}
-                      alt={article.title}
-                      width="300"
-                      height="200"
-                    />
-                    <div className={styles.date}>
-                      {new Intl.DateTimeFormat('en-US', { dateStyle: 'medium' }).format(new Date(article.date))}
+        {articles.length === 0 ? (
+          <p className={styles.empty}>No articles yet.</p>
+        ) : (
+          <ul className={styles.blogGrid}>
+            {articles.map((article, index) => {
+              return (
+                <li key={article._id} data-reveal={index % 3 ? String(index % 3) : ''}>
+                  <Link href={`/articles/${article.slug}`}>
+                    <div className={styles.imgWrapper}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={article.coverImage.src}
+                        alt={article.title}
+                        width="300"
+                        height="200"
+                        loading="lazy"
+                      />
                     </div>
-                  </div>
-                  <p>{article.title}</p>
-                </Link>
-              </li>
-            )
-          })}
-        </ul>
+                    <time className={styles.date}>
+                      {new Intl.DateTimeFormat('en-US', { dateStyle: 'medium' }).format(new Date(article.date))}
+                    </time>
+                    <p>{article.title}</p>
+                  </Link>
+                </li>
+              )
+            })}
+          </ul>
+        )}
       </div>
     </section>
   )

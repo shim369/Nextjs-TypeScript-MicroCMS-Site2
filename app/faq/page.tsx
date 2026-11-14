@@ -9,14 +9,12 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <>
-      <section id="faq">
-        <UnderInner title={metadata.title as string} />
-        <div className={styles.containerInner}>
-          <p className={styles.underRead}>If you have any inquiries, please don&apos;t hesitate to contact me.</p>
-          <Faq />
-        </div>
-      </section>
-    </>
+    <section id="faq">
+      <UnderInner title={metadata.title as string} label="Questions" />
+      <div className={`${styles.wrap} ${styles.pageBody}`}>
+        <p className={styles.underRead} data-reveal>If you have any inquiries, please don&apos;t hesitate to contact me.</p>
+        <Faq />
+      </div>
+    </section>
   );
 }

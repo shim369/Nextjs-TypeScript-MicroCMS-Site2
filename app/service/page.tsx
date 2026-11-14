@@ -11,84 +11,60 @@ export default function Page() {
     {
       title: "Website Development",
       technologies: "HTML, CSS/SASS, JavaScript, Astro",
-      price: "¥300,000 ~"
+      price: "¥400,000 ~"
     },
     {
       title: "Web Application Development",
       technologies: "Next.js, Nuxt.js, Python, Django",
-      price: "¥500,000 ~"
+      price: "¥1,000,000 ~"
     },
     {
       title: "CMS Construction",
       technologies: "WordPress, MicroCMS, Newt",
-      price: "¥200,000 ~"
+      price: "¥500,000 ~"
     },
     {
       title: "Design & UI/UX",
       technologies: "Figma, Adobe Photoshop, Illustrator",
-      price: "¥150,000 ~"
+      price: "¥200,000 ~"
     },
+  ];
+
+  const options = [
+    { title: "Maintenance", price: "¥20,000 ~ /Month" },
+    { title: "SEO Optimization", price: "¥80,000 ~" },
+    { title: "Content Creation", price: "¥30,000 ~ /Page" },
   ];
 
   return (
     <section id="service">
-      <UnderInner title={metadata.title as string} />
-      <div className={styles.containerInner}>
-        <p className={styles.underRead}>The prices listed above are all reference prices and may vary depending on the project&apos;s scope and requirements.<br />For more details, please inquire.</p>
+      <UnderInner title={metadata.title as string} label="What I offer" />
+      <div className={`${styles.wrap} ${styles.pageBody}`}>
+        <p className={styles.underRead} data-reveal>The prices listed below are reference prices (excluding tax) and may vary depending on the project&apos;s scope and requirements. For more details, please inquire.</p>
 
-        <ul className={styles.services}>
-          {services.map((service, index) => {
-            if (!service.title) return null;
-
-            return (
-              <li key={index}>
-                <h3 className={styles.tblTitle}>{index + 1}. {service.title}</h3>
-                <table className={styles.tbl}>
-                  <tbody>
-                    <tr>
-                      <th>Technologies</th>
-                      <td>{service.technologies}</td>
-                    </tr>
-                    <tr>
-                      <th>Price</th>
-                      <td>{service.price}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </li>
-            );
-          })}
+        <ul className={styles.rows}>
+          {services.map((service, index) => (
+            <li key={service.title} className={styles.priceRow} data-reveal={index ? String(index) : ''}>
+              <span className={styles.num}>{String(index + 1).padStart(2, '0')}</span>
+              <h3>{service.title}</h3>
+              <p className={styles.tech}>{service.technologies}</p>
+              <span className={styles.price}>{service.price}</span>
+            </li>
+          ))}
         </ul>
 
-        <h3 className={`${styles.tblTitle} ${styles.opTitle}`}>Additional Options</h3>
-        <table className={styles.tbl2}>
-          <tbody>
-            <tr>
-              <th>
-                Maintenance
-              </th>
-              <td>
-                ¥20,000 ~ /Month
-              </td>
-            </tr>
-            <tr>
-              <th>
-                SEO Optimization
-              </th>
-              <td>
-                ¥50,000 ~
-              </td>
-            </tr>
-            <tr>
-              <th>
-                Content Creation
-              </th>
-              <td>
-                ¥30,000 ~
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div className={styles.optionsBox} data-reveal>
+          <span className={`${styles.mono} ${styles.dim}`}>( Options )</span>
+          <h2>Additional Options</h2>
+          <ul>
+            {options.map((option) => (
+              <li key={option.title}>
+                <span>{option.title}</span>
+                <span>{option.price}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </section>
   )

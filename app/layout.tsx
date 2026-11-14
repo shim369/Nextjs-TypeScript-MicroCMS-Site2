@@ -1,34 +1,35 @@
-import { Tulpen_One, Lato } from "next/font/google"
+import { Syne, Inter_Tight, JetBrains_Mono } from "next/font/google"
 import './styles/globals.scss'
-import styles from './styles/layout.module.scss'
 import type { Metadata } from 'next'
 import { Header } from './components/Header'
 import { Footer } from './components/Footer'
-import { config } from '@fortawesome/fontawesome-svg-core'
-import '@fortawesome/fontawesome-svg-core/styles.css'
+import { RevealObserver } from './components/RevealObserver'
 
-config.autoAddCss = false
-
-
-const tulpen_one = Tulpen_One({
-  weight: '400',
+const syne = Syne({
+  weight: ['500', '700', '800'],
   subsets: ['latin'],
-  variable: '--font-tulpen_One',
-  display: "swap",
+  variable: '--font-display',
+  display: 'swap',
 })
-const lato = Lato({
-  weight: '300',
+const interTight = Inter_Tight({
+  weight: ['400', '500', '600'],
   subsets: ['latin'],
-  variable: '--font-lato',
-  display: "swap",
+  variable: '--font-sans',
+  display: 'swap',
+})
+const jetbrainsMono = JetBrains_Mono({
+  weight: ['400', '500'],
+  subsets: ['latin'],
+  variable: '--font-mono',
+  display: 'swap',
 })
 
 export const metadata: Metadata = {
   title: {
-    default: 'NEXT TECH',
+    default: 'NEXT TECH | Increasing Business Velocity through Technology',
     template: '%s | NEXT TECH',
   },
-  description: 'NEXT TECH',
+  description: 'NEXT TECH — tailor-made web solutions with HTML, CSS, JavaScript, Python and more. Since 2023.',
 }
 
 export default function RootLayout({
@@ -37,15 +38,16 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${tulpen_one.variable} ${lato.variable}`}>
+    <html lang="en" className={`${syne.variable} ${interTight.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
+      <head>
+        {/* Enables reveal animations only when JS is available (prevents hidden content without JS) */}
+        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
+      </head>
       <body suppressHydrationWarning={true}>
         <Header />
-        <main className={styles.main}>
-          <div className={styles.container}>
-            {children}
-          </div>
-        </main>
+        <main>{children}</main>
         <Footer />
+        <RevealObserver />
       </body>
     </html>
   )

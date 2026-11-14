@@ -31,27 +31,28 @@ export const aboutData = [
 
 export default function Page() {
   return (
-    <section id="blog">
-      <UnderInner title={metadata.title as string} />
-      <div className={styles.containerInner}>
-        <div className={styles.pageNav}>
+    <section id="about">
+      <UnderInner title={metadata.title as string} label="Who I am" />
+      <div className={`${styles.wrap} ${styles.pageBody}`}>
+        <nav aria-label="About sections" data-reveal>
           <ul className={styles.pageNavList}>
-            {aboutData.map((about, index) => (
-              <li key={index}>
+            {aboutData.map((about) => (
+              <li key={about.id}>
                 <Link href={`#${about.id}`}>
                   {about.title}
                 </Link>
               </li>
             ))}
           </ul>
-        </div>
+        </nav>
 
         {aboutData.map((about, index) => (
-          <section id={about.id} className={styles.about} key={index} data-testid={about.id}>
-            <div className={styles.aboutInner}>
-              <h3>{about.title}</h3>
-              <div className={`${styles.aboutFlex} ${about.title === 'MISSION' ? styles.visionSection : ''}`}>
-                <Image src={about.image} alt={about.title} width={600} height={400} priority={index === 1} />
+          <section id={about.id} className={styles.about} key={about.id} data-testid={about.id}>
+            <div className={`${styles.aboutFlex} ${index % 2 === 1 ? styles.reverse : ''}`}>
+              <Image src={about.image} alt={about.title} width={600} height={450} priority={index === 0} data-reveal />
+              <div data-reveal="1">
+                <span className={styles.num}>{`( ${String(index + 1).padStart(2, '0')} )`}</span>
+                <h3>{about.title}</h3>
                 <p>{about.text}</p>
               </div>
             </div>
