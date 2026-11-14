@@ -4,6 +4,37 @@ import { useState } from 'react'
 import type { FocusEvent, FormEvent } from 'react'
 import styles from '../styles/page.module.scss'
 
+declare global {
+  interface Window {
+    grecaptcha?: {
+      ready: (cb: () => void) => void
+      execute: (key: string, opts: { action: string }) => Promise<string>
+    }
+  }
+}
+
+const SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY
+
+/** Loads reCAPTCHA v3 on submit and returns a token (undefined when not configured) */
+const getRecaptchaToken = (): Promise<string | undefined> => {
+  if (!SITE_KEY) return Promise.resolve(undefined)
+  return new Promise((resolve) => {
+    const run = () =>
+      window.grecaptcha!.ready(() =>
+        window
+          .grecaptcha!.execute(SITE_KEY, { action: 'submit' })
+          .then(resolve)
+          .catch(() => resolve(undefined)),
+      )
+    if (window.grecaptcha) return run()
+    const script = document.createElement('script')
+    script.src = `https://www.google.com/recaptcha/api.js?render=${SITE_KEY}`
+    script.onload = run
+    script.onerror = () => resolve(undefined)
+    document.head.appendChild(script)
+  })
+}
+
 type FieldName = 'name' | 'email' | 'message'
 type Errors = Partial<Record<FieldName, string>>
 
@@ -46,23 +77,14 @@ export const Contact = () => {
     setErrors(nextErrors)
     if (Object.values(nextErrors).some(Boolean)) return
 
-    const formData = new FormData()
-    Object.entries(data).forEach(([key, value]) => {
-      formData.append(key, value)
-    })
-
     setIsSending(true)
     try {
-      const response = await fetch(
-        process.env.NEXT_PUBLIC_NEWT_FORM_ENDPOINT + '',
-        {
-          method: 'POST',
-          body: formData,
-          headers: {
-            Accept: 'application/json',
-          },
-        },
-      )
+      const googleReCaptchaToken = await getRecaptchaToken()
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...data, googleReCaptchaToken }),
+      })
 
       if (response.ok) {
         router.push('/thanks')
@@ -114,6 +136,13 @@ export const Contact = () => {
           <button type="submit" className={styles.submit} disabled={isSending}>
             {isSending ? 'Sending…' : 'Submit'} <span aria-hidden="true">→</span>
           </button>
+          {SITE_KEY && (
+            <p className={styles.recaptchaNote}>
+              This site is protected by reCAPTCHA and the Google{' '}
+              <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a> and{' '}
+              <a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer">Terms of Service</a> apply.
+            </p>
+          )}
         </form>
       </div>
     </div>

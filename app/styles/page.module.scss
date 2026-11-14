@@ -840,6 +840,17 @@ $mobile: 560px;
 	}
 }
 
+.recaptchaNote {
+	margin-top: 20px;
+	font-size: .75rem;
+	color: #8f8c84;
+
+	a {
+		text-decoration: underline;
+		text-underline-offset: 2px;
+	}
+}
+
 /* =========================================================
    Footer (dark)
    ========================================================= */
@@ -1173,6 +1184,68 @@ body:has(.contact) .footer {
 	padding-top: 12px;
 	border-top: 1px solid var(--rule);
 	color: var(--ink-soft);
+}
+
+.cat {
+	color: var(--hot);
+	margin-right: 12px;
+}
+
+.eyecatch {
+	margin-bottom: 48px;
+	border-radius: 14px;
+	overflow: hidden;
+
+	img {
+		width: 100%;
+		height: auto;
+	}
+}
+
+.pager {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 20px;
+	margin-top: 80px;
+	padding-top: 32px;
+	border-top: 1px solid var(--rule);
+
+	a {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		transition: color .25s;
+
+		&:hover {
+			color: var(--hot);
+		}
+	}
+
+	small {
+		@include mono;
+		color: var(--ink-soft);
+	}
+
+	span {
+		font-family: var(--font-display), sans-serif;
+		font-weight: 700;
+		font-size: 1.15rem;
+		letter-spacing: -.02em;
+		line-height: 1.25;
+	}
+
+	@media (max-width: $mobile) {
+		grid-template-columns: 1fr;
+	}
+}
+
+.pagerNext {
+	text-align: right;
+	grid-column: 2;
+
+	@media (max-width: $mobile) {
+		grid-column: 1;
+	}
 }
 
 .empty {
