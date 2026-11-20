@@ -1,6 +1,6 @@
-# NEXT TECH
+# NEXT BASE
 
-Corporate site built with Next.js (App Router) + TypeScript + microCMS.
+Corporate site built with Next.js 16 (App Router, Cache Components) + React 19 + TypeScript + microCMS.
 
 ## Setup
 
@@ -17,7 +17,8 @@ Node.js 24.x is required (see `engines` in `package.json`).
 | Variable | Purpose |
 | --- | --- |
 | `MICROCMS_SERVICE_DOMAIN` / `MICROCMS_API_KEY` | microCMS (endpoint `blogs`) |
-| `CONTACT_TO_EMAIL` / `SMTP_*` | Contact mail via nodemailer (`app/api/contact/route.ts`; use an app password for Gmail) |
+| `MICROCMS_WEBHOOK_SECRET` | Secret of the microCMS webhook that refreshes the blog cache |
+| `CONTACT_TO_EMAIL` / `SMTP_*` | Contact mail via nodemailer (Server Action `app/actions/contact.ts`; use an app password for Gmail) |
 | `RECAPTCHA_SECRET_KEY` / `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` | reCAPTCHA v3 (optional; verification is skipped when unset) |
 
 ## microCMS schema (`blogs`)
@@ -27,13 +28,21 @@ Node.js 24.x is required (see `engines` in `package.json`).
 ## Structure
 
 - `app/page.tsx` … Top page
-- `app/blog/page.tsx` … Article list (ISR 60s)
-- `app/articles/[id]/page.tsx` … Article detail (ISR 60s, new articles generated on first request)
-- `app/api/contact/route.ts` … Contact form submission (nodemailer + optional reCAPTCHA v3)
-- `lib/microcms.ts` … microCMS client
+- `app/blog/page.tsx` … Article list
+- `app/articles/[id]/page.tsx` … Article detail (known articles prerendered; new ones rendered on first request)
+- `app/actions/contact.ts` … Contact form Server Action (nodemailer + optional reCAPTCHA v3)
+- `app/api/revalidate/route.ts` … microCMS webhook → `revalidateTag('blogs')`
+- `lib/microcms.ts` … microCMS client, cached with `"use cache"` + `cacheLife('hours')` + `cacheTag('blogs')`
+
+## Caching
+
+Blog data is cached for an hour (Cache Components). To reflect edits immediately, add a webhook in
+microCMS (API settings → Webhook → Custom) pointing to `https://<your-domain>/api/revalidate`
+with the same secret as `MICROCMS_WEBHOOK_SECRET`.
 
 ## Scripts
 
 - `npm run dev` / `npm run build` / `npm start`
 - `npm test` … Jest + Testing Library
-- `npm run lint`
+- `npm run lint` … ESLint (flat config)
+- `npm run typecheck` … route types + `tsc`

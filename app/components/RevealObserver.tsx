@@ -26,7 +26,8 @@ export const RevealObserver = () => {
           }
         });
       },
-      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' },
+      // threshold 0: tall elements (e.g. long articles) can never reach a ratio-based threshold
+      { threshold: 0, rootMargin: '0px 0px -10% 0px' },
     );
 
     const scan = () => document.querySelectorAll(selector).forEach((el) => io.observe(el));
