@@ -9,15 +9,17 @@ import { Clock } from './Clock';
 export const Header = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const pathname = usePathname();
+  const [prevPathname, setPrevPathname] = useState(pathname);
+
+  // Close the menu after navigating (adjusting state during render instead of in an effect)
+  if (pathname !== prevPathname) {
+    setPrevPathname(pathname);
+    setIsNavOpen(false);
+  }
 
   const toggleNavClick = () => {
     setIsNavOpen((prev) => !prev);
   };
-
-  // Close the menu after navigating
-  useEffect(() => {
-    setIsNavOpen(false);
-  }, [pathname]);
 
   useEffect(() => {
     document.body.classList.toggle(styles.open, isNavOpen);

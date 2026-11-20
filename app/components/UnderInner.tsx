@@ -11,7 +11,7 @@ export const UnderInner = ({ title, label }: UnderInnerProps) => {
     <div className={styles.pageHead}>
       <div className={styles.wrap}>
         <div className={styles.metaRow}>
-          <span>{label ? `(${label})` : '(NEXT TECH)'}</span>
+          <span>{label ? `(${label})` : '(NEXT BASE)'}</span>
           <span>Est. 2023 — Tokyo, JP</span>
         </div>
         <h1 className={styles.pageTitle}>

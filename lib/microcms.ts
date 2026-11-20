@@ -1,6 +1,8 @@
 import 'server-only'
+import { cacheLife, cacheTag } from 'next/cache'
 import { createClient } from 'microcms-js-sdk'
 import type { Blog, BlogSummary } from '../types/blog'
+import { BLOG_TAG, blogTag } from './cache-tags'
 
 const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN
 const apiKey = process.env.MICROCMS_API_KEY
@@ -21,6 +23,11 @@ const toSummary = (blog: Blog): BlogSummary => ({
 
 /** Blog list, newest first */
 export const getBlogs = async (limit = 100): Promise<BlogSummary[]> => {
+  'use cache'
+  // Refreshed hourly in the background; the webhook refreshes immediately on publish
+  cacheLife('hours')
+  cacheTag(BLOG_TAG)
+
   const { contents } = await client.getList<Blog>({
     endpoint: 'blogs',
     queries: {
@@ -34,6 +41,10 @@ export const getBlogs = async (limit = 100): Promise<BlogSummary[]> => {
 
 /** Blog detail (null if not found) */
 export const getBlog = async (id: string): Promise<Blog | null> => {
+  'use cache'
+  cacheLife('hours')
+  cacheTag(BLOG_TAG, blogTag(id))
+
   try {
     return await client.getListDetail<Blog>({ endpoint: 'blogs', contentId: id })
   } catch {

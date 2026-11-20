@@ -17,7 +17,7 @@ describe('FAQ', () => {
 			{ question: "Do you provide content creation services?", answer: 'Yes, I offer content creation services. The base fee for content creation starts at ¥30,000 per page.' },
 		];
 
-		faqs.forEach((faq, index) => {
+		faqs.forEach((faq) => {
 			const q = screen.getByText(faq.question);
 			const a = screen.getByText(faq.answer);
 
