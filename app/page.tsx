@@ -4,7 +4,7 @@ import { Contact } from './components/Contact'
 import { Service } from './components/Service'
 import { Statement } from './components/Statement'
 
-const tickerItems = ['HTML', 'CSS', 'JavaScript', 'Python', 'PHP', 'Next.js', 'Corporate Sites', 'Online Shops']
+const stack = ['HTML', 'CSS', 'JavaScript', 'Python', 'PHP', 'Next.js']
 
 export default function Home() {
   return (
@@ -42,14 +42,23 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Ticker */}
-      <div className={styles.ticker} aria-hidden="true">
-        <div className={styles.tickerTrack}>
-          {[...tickerItems, ...tickerItems].map((item, i) => (
-            <span key={i}>{item}</span>
-          ))}
+      {/* Stack — black spec strip */}
+      <section className={styles.stackBar} aria-label="Tech stack">
+        <div className={`${styles.wrap} ${styles.stackGrid}`}>
+          <div className={styles.stackHead}>
+            <span className={styles.mono}>( Stack )</span>
+            <p>Corporate sites, online shops &amp; web apps.</p>
+          </div>
+          <ul className={styles.stackList}>
+            {stack.map((tech, i) => (
+              <li key={tech}>
+                <span className={styles.stackNum}>{String(i + 1).padStart(2, '0')}</span>
+                <span className={styles.stackName}>{tech}</span>
+              </li>
+            ))}
+          </ul>
         </div>
-      </div>
+      </section>
 
       {/* Index */}
       <section className={styles.section} id="index">

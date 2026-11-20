@@ -279,12 +279,14 @@ $mobile: 560px;
 	@include display;
 	// Sized so the longest line ("Velocity/Tech", ~10.7em wide in Syne) always fits the container
 	font-size: calc(min(var(--max), 100vw - 48px) / 10.9);
+	line-height: .98;
 	margin: 4vh 0 0;
 
 	.line {
 		display: block;
 		overflow: hidden;
-		padding-bottom: .04em;
+		// Room for glyphs that reach past the line box (e.g. "/"), which overflow: hidden would clip
+		padding: .04em 0 .08em;
 
 		> span {
 			display: inline-flex;
@@ -383,42 +385,153 @@ $mobile: 560px;
 }
 
 /* =========================================================
-   Ticker
+   Stack strip (black accent)
    ========================================================= */
-.ticker {
+.stackBar {
 	background: var(--ink);
 	color: var(--paper);
-	overflow: hidden;
-	padding: 18px 0;
-	transform: rotate(-1.2deg) scale(1.02);
-	margin: 30px 0;
+	margin-top: 30px;
 }
 
-.tickerTrack {
+.stackGrid {
+	display: grid;
+	grid-template-columns: minmax(200px, 1fr) 3fr;
+	border-left: 1px solid #2a2a2a;
+	border-right: 1px solid #2a2a2a;
+
+	@media (max-width: $tablet) {
+		grid-template-columns: 1fr;
+	}
+}
+
+.stackHead {
 	display: flex;
-	width: max-content;
-	animation: tick 28s linear infinite;
+	flex-direction: column;
+	justify-content: space-between;
+	gap: 24px;
+	padding: 28px 24px;
+	border-right: 1px solid #2a2a2a;
 
-	span {
-		font-family: var(--font-display), sans-serif;
-		font-weight: 700;
-		font-size: clamp(1.4rem, 3vw, 2.2rem);
-		padding: 0 28px;
-		display: flex;
-		align-items: center;
-		gap: 56px;
-		white-space: nowrap;
+	.mono {
+		color: var(--hot);
+	}
 
-		&::after {
-			content: "✳";
-			color: var(--hot);
-			font-size: .8em;
+	p {
+		color: #a8a59c;
+		font-size: .95rem;
+		line-height: 1.4;
+		max-width: 18ch;
+	}
+
+	@media (max-width: $tablet) {
+		flex-direction: row;
+		align-items: baseline;
+		border-right: 0;
+		border-bottom: 1px solid #2a2a2a;
+		padding: 20px;
+
+		p {
+			max-width: none;
+			text-align: right;
 		}
 	}
 }
 
-@keyframes tick {
-	to { transform: translateX(-50%); }
+.stackList {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+
+	li {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		gap: 36px;
+		min-height: 128px;
+		padding: 20px 24px;
+		border-right: 1px solid #2a2a2a;
+		border-bottom: 1px solid #2a2a2a;
+		overflow: hidden;
+		transition: color .3s;
+
+		&::before {
+			content: "";
+			position: absolute;
+			inset: 0;
+			z-index: 0;
+			background: var(--hot);
+			transform: scaleY(0);
+			transform-origin: bottom;
+			transition: transform .5s var(--ease);
+		}
+
+		&:nth-child(3n) {
+			border-right: 0;
+		}
+
+		&:nth-last-child(-n + 3) {
+			border-bottom: 0;
+		}
+
+		&:hover {
+			color: var(--ink);
+
+			&::before {
+				transform: scaleY(1);
+			}
+
+			.stackNum {
+				color: var(--ink);
+			}
+		}
+
+		> * {
+			position: relative;
+			z-index: 1;
+		}
+	}
+
+	@media (max-width: $mobile) {
+		grid-template-columns: repeat(2, 1fr);
+
+		li {
+			min-height: 100px;
+			gap: 24px;
+			padding: 16px 20px;
+
+			&:nth-child(3n) {
+				border-right: 1px solid #2a2a2a;
+			}
+
+			&:nth-child(2n) {
+				border-right: 0;
+			}
+
+			&:nth-last-child(-n + 3) {
+				border-bottom: 1px solid #2a2a2a;
+			}
+
+			&:nth-last-child(-n + 2) {
+				border-bottom: 0;
+			}
+		}
+	}
+}
+
+.stackNum {
+	font-family: var(--font-mono), monospace;
+	font-size: .75rem;
+	color: var(--hot);
+	transition: color .3s;
+}
+
+.stackName {
+	font-family: var(--font-display), sans-serif;
+	font-weight: 800;
+	// Sized so the longest name ("JavaScript") fits its cell at every width
+	font-size: clamp(1.2rem, 2.3vw, 2.2rem);
+	letter-spacing: -.04em;
+	line-height: 1;
 }
 
 /* =========================================================
