@@ -6,7 +6,7 @@ import { Logo } from './Logo'
 describe('Logo', () => {
   test('renders Logo text', () => {
     render(<Logo />)
-    const logoText = screen.getByText(/NEXT TECH/i);
+    const logoText = screen.getByText(/NEXT BASE/i);
     expect(logoText).toBeInTheDocument();
   })
 })
