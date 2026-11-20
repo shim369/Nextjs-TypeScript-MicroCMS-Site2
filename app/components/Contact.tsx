@@ -1,8 +1,9 @@
 "use client";
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import type { FocusEvent, FormEvent } from 'react'
 import styles from '../styles/page.module.scss'
+import { sendContact } from '../actions/contact'
 
 declare global {
   interface Window {
@@ -48,14 +49,15 @@ const rules: Record<FieldName, (value: string) => string> = {
 export const Contact = () => {
   const router = useRouter()
   const [errors, setErrors] = useState<Errors>({})
-  const [isSending, setIsSending] = useState(false)
+  // Stays pending through the Server Action and the following navigation
+  const [isSending, startTransition] = useTransition()
 
   const onBlur = (event: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const key = event.target.name as FieldName
     setErrors((prev) => ({ ...prev, [key]: rules[key](event.target.value) }))
   }
 
-  const onSubmit = async (event: FormEvent) => {
+  const onSubmit = (event: FormEvent) => {
     event.preventDefault()
 
     const target = event.target as typeof event.target & {
@@ -77,25 +79,15 @@ export const Contact = () => {
     setErrors(nextErrors)
     if (Object.values(nextErrors).some(Boolean)) return
 
-    setIsSending(true)
-    try {
-      const googleReCaptchaToken = await getRecaptchaToken()
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...data, googleReCaptchaToken }),
-      })
-
-      if (response.ok) {
-        router.push('/thanks')
-      } else {
+    startTransition(async () => {
+      try {
+        const googleReCaptchaToken = await getRecaptchaToken()
+        const result = await sendContact({ ...data, googleReCaptchaToken })
+        router.push(result.ok ? '/thanks' : '/error')
+      } catch {
         router.push('/error')
       }
-    } catch (err) {
-      router.push('/error')
-    } finally {
-      setIsSending(false)
-    }
+    })
   }
 
   const fieldClass = (key: FieldName) =>
