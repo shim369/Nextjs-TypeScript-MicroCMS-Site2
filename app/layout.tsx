@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { Header } from './components/Header'
 import { Footer } from './components/Footer'
 import { RevealObserver } from './components/RevealObserver'
+import { getCurrentYear } from '@/lib/date'
 
 const syne = Syne({
   weight: ['500', '700', '800'],
@@ -26,19 +27,21 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: 'NEXT TECH | Increasing Business Velocity through Technology',
-    template: '%s | NEXT TECH',
+    default: 'NEXT BASE | Increasing Business Velocity through Technology',
+    template: '%s | NEXT BASE',
   },
-  description: 'NEXT TECH — tailor-made web solutions with HTML, CSS, JavaScript, Python and more. Since 2023.',
+  description: 'NEXT BASE — tailor-made web solutions with HTML, CSS, JavaScript, Python and more. Since 2023.',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const year = await getCurrentYear()
+
   return (
-    <html lang="en" className={`${syne.variable} ${interTight.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${syne.variable} ${interTight.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning data-scroll-behavior="smooth">
       <head>
         {/* Enables reveal animations only when JS is available (prevents hidden content without JS) */}
         <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
@@ -46,7 +49,7 @@ export default function RootLayout({
       <body suppressHydrationWarning={true}>
         <Header />
         <main>{children}</main>
-        <Footer />
+        <Footer year={year} />
         <RevealObserver />
       </body>
     </html>

@@ -1,15 +1,13 @@
 import Link from 'next/link'
 import styles from '../styles/page.module.scss'
 
-export const Footer = () => {
-  const year = new Date().getFullYear()
-
+export const Footer = ({ year }: { year: number }) => {
   return (
     <footer className={styles.footer}>
       <div className={styles.wrap}>
-        <div className={styles.footWord} aria-hidden="true">NEXT TECH</div>
+        <div className={styles.footWord} aria-hidden="true">NEXT BASE</div>
         <div className={styles.footBar}>
-          <p>&copy; 2023–{year} NEXT TECH</p>
+          <p>&copy; 2023–{year} NEXT BASE</p>
           <nav className={styles.footLinks} aria-label="Footer">
             <Link href="/about">About</Link>
             <Link href="/service">Service</Link>

@@ -6,23 +6,16 @@ import { cmsImage, formatDate, toPlainText } from '@/lib/format'
 import styles from '../../styles/page.module.scss'
 import { UnderInner } from '@/app/components/UnderInner'
 
-type Props = {
-  params: {
-    id: string
-  }
-}
-
-// Regenerate at most every 60 seconds; articles added after build are generated on first request
-export const revalidate = 60
-export const dynamicParams = true
-
+// Known articles are prerendered at build time; ones published later are rendered on first
+// request and then cached (data caching lives in lib/microcms.ts via "use cache")
 export async function generateStaticParams() {
   const posts = await getBlogs()
   return posts.map((post) => ({ id: post.id }))
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const post = await getBlog(params.id)
+export async function generateMetadata({ params }: PageProps<'/articles/[id]'>): Promise<Metadata> {
+  const { id } = await params
+  const post = await getBlog(id)
   if (!post) return { title: 'BLOG' }
 
   const description = toPlainText(post.content).slice(0, 110) || undefined
@@ -35,8 +28,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default async function Article({ params }: Props) {
-  const [post, posts] = await Promise.all([getBlog(params.id), getBlogs()])
+export default async function Article({ params }: PageProps<'/articles/[id]'>) {
+  const { id } = await params
+  const [post, posts] = await Promise.all([getBlog(id), getBlogs()])
   if (!post) notFound();
 
   // List is newest first: PREV = one older, NEXT = one newer
