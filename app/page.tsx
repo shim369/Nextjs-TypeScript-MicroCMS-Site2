@@ -27,13 +27,13 @@ export default function Home() {
           </h1>
 
           <div className={styles.heroBottom}>
-            <p className={styles.heroLead}><b>Welcome to NEXT BASE.</b> Your gateway to cutting-edge tech solutions — built to move your business faster.</p>
+            <p className={styles.heroLead}><b>Welcome to NEXT TECH.</b> Your gateway to cutting-edge tech solutions — built to move your business faster.</p>
             <a href="#contact" className={styles.cta}>Start a project <span className={styles.ar}>→</span></a>
             <div className={styles.badge} aria-hidden="true">
               <svg viewBox="0 0 200 200">
                 <defs><path id="circ" d="M100,100 m-80,0 a80,80 0 1,1 160,0 a80,80 0 1,1 -160,0" /></defs>
                 <text fontSize="15" letterSpacing="5" fill="#121212">
-                  <textPath href="#circ">WEB DEVELOPMENT • SINCE 2023 • NEXT BASE • </textPath>
+                  <textPath href="#circ">WEB DEVELOPMENT • SINCE 2023 • NEXT TECH • </textPath>
                 </text>
               </svg>
               <span className={styles.core}>↓</span>

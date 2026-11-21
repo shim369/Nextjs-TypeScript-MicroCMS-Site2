@@ -26,7 +26,7 @@ describe('Home', () => {
       // Hero
       expect(screen.getByText('(Web Development)')).toBeInTheDocument();
       expect(screen.getByRole('heading', { level: 1, name: 'Increasing Business Velocity through Technology' })).toBeInTheDocument();
-      expect(screen.getByText('Welcome to NEXT BASE.')).toBeInTheDocument();
+      expect(screen.getByText('Welcome to NEXT TECH.')).toBeInTheDocument();
       expect(screen.getByText(/Your gateway to cutting-edge tech solutions/i)).toBeInTheDocument();
 
       // Index

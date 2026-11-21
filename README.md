@@ -1,4 +1,4 @@
-# NEXT BASE
+# NEXT TECH
 
 Corporate site built with Next.js 16 (App Router, Cache Components) + React 19 + TypeScript + microCMS.
 

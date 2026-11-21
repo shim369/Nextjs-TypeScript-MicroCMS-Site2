@@ -63,7 +63,7 @@ export async function sendContact(input: ContactInput): Promise<ContactResult> {
       from: SMTP_USER,
       to: CONTACT_TO_EMAIL,
       replyTo: email,
-      subject: `【NEXT BASE】お問い合わせ: ${name.replace(/[\r\n]/g, ' ')}`,
+      subject: `【NEXT TECH】お問い合わせ: ${name.replace(/[\r\n]/g, ' ')}`,
       text: `お名前: ${name}\nメールアドレス: ${email}\n\nメッセージ:\n${message}`,
     })
   } catch (err) {

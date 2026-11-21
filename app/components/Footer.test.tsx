@@ -6,7 +6,7 @@ import { Footer } from './Footer'
 describe('Footer', () => {
   test('renders footer text', () => {
     render(<Footer year={2026} />)
-    const footerText = screen.getByText(/©.*NEXT BASE/i);
+    const footerText = screen.getByText(/©.*NEXT TECH/i);
     expect(footerText).toBeInTheDocument();
   })
 })

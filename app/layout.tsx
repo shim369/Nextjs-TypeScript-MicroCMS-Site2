@@ -27,10 +27,10 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: 'NEXT BASE | Increasing Business Velocity through Technology',
-    template: '%s | NEXT BASE',
+    default: 'NEXT TECH | Increasing Business Velocity through Technology',
+    template: '%s | NEXT TECH',
   },
-  description: 'NEXT BASE — tailor-made web solutions with HTML, CSS, JavaScript, Python and more. Since 2023.',
+  description: 'NEXT TECH — tailor-made web solutions with HTML, CSS, JavaScript, Python and more. Since 2023.',
 }
 
 export default async function RootLayout({
